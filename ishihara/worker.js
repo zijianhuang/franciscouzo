@@ -81,9 +81,16 @@ class SpatialHash {
   }
 }
 
+const QUALITY_VALUES = {
+  "Low": 1000,
+  "Medium": 10000,
+  "High": 100000
+};
+
 self.onmessage = function(e) {
   const options = e.data;
-  const { min_radius, max_radius, stop_after } = options;
+  const { min_radius, max_radius } = options;
+  const stop_after = QUALITY_VALUES[options.quality];
 
   const FactoryClass = {
     "Circle": CircleFactory,

@@ -38,9 +38,9 @@ const ishihara_input = {
   circular: true,
   resize: true,
   color_scheme: 'General 1',
+  quality: 'Medium',
   min_radius: (canvas.width + canvas.height) / 800,
   max_radius: (canvas.width + canvas.height) / 100,
-  stop_after: 10000,
   overlap: 0.9,
   incremental_radius: true,
   shape_factory: 'Circle',
@@ -207,6 +207,7 @@ gui.add(ishihara_input, 'circular').name('Circular').onChange(value => {
   renderText();
 });
 gui.add(ishihara_input, 'resize').name('Resize');
+gui.add(ishihara_input, 'quality', ['Low', 'Medium', 'High']).name('Quality');
 gui.add(ishihara_input, 'shape_factory', ['Circle', 'Regular polygon', 'Cross', 'Star', 'Heart']).onChange(value => {
   hide_gui_element(gui, 'sides', value !== 'Regular polygon' && value !== 'Star');
   hide_gui_element(gui, 'pointiness', value !== 'Cross' && value !== 'Star');
@@ -223,7 +224,6 @@ gui.add(ishihara_input, 'max_radius', 2, 50).name('Max radius').onChange(() => {
   ishihara_input.min_radius = Math.min(ishihara_input.min_radius, ishihara_input.max_radius);
   update_gui(gui);
 });
-gui.add(ishihara_input, 'stop_after', 1000, 100000, 1).name('Stop after');
 gui.add(ishihara_input, 'overlap', 0, 1).name('Overlap');
 gui.add(ishihara_input, 'incremental_radius').name('Incremental radius');
 gui.add(ishihara_input, 'generate').name('Generate');
