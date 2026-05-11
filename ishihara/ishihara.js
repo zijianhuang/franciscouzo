@@ -342,10 +342,28 @@ document.getElementById('image_upload').addEventListener('change', e => {
       canvas.style.width  = `${canvas.width  / PIXEL_RATIO}px`;
       canvas.style.height = `${canvas.height / PIXEL_RATIO}px`;
 
+      // When circular, shrink the image so its corners aren't clipped by the
+      // circular plate boundary. A square fits inside a circle of equal diameter
+      // only when its side is diameter * (1/√2) ≈ 0.707. We apply that scale
+      // and center the image so all four corners stay within the circle.
+      let drawW, drawH, drawX, drawY;
+      if (ishihara_input.circular) {
+        const scale = 1 / Math.sqrt(2);
+        drawW = canvas.width  * scale;
+        drawH = canvas.height * scale;
+        drawX = (canvas.width  - drawW) / 2;
+        drawY = (canvas.height - drawH) / 2;
+      } else {
+        drawW = canvas.width;
+        drawH = canvas.height;
+        drawX = 0;
+        drawY = 0;
+      }
+
       // Fill white on display canvas before drawing
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, drawX, drawY, drawW, drawH);
 
       img_canvas.width  = canvas.width;
       img_canvas.height = canvas.height;
@@ -355,7 +373,7 @@ document.getElementById('image_upload').addEventListener('change', e => {
       // is incorrectly treated as "inside the shape", producing a uniform plate.
       img_ctx.fillStyle = 'white';
       img_ctx.fillRect(0, 0, img_canvas.width, img_canvas.height);
-      img_ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      img_ctx.drawImage(img, drawX, drawY, drawW, drawH);
     };
 
     if (isSvg) {
